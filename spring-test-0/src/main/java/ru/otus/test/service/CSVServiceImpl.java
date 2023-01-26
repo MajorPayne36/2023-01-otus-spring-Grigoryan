@@ -4,8 +4,9 @@ import org.springframework.core.io.ClassPathResource;
 import ru.otus.test.domain.Question;
 import ru.otus.test.exception.MyRuntimeException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,10 +14,9 @@ public class CSVServiceImpl implements CSVService {
     private static final String COMMA = ",";
     private static final String TEST_FILE = "test.csv";
 
-    @Override
-    public List<List<String>> getFieldsFromCsvByLambda() throws IOException {
-        List<List<String>> result = Files.readAllLines(new ClassPathResource(TEST_FILE).getFile().toPath())
-                .stream()
+    private List<List<String>> getFieldsFromCsvByLambda() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(new ClassPathResource(TEST_FILE).getInputStream()));
+        List<List<String>> result = br.lines()
                 .map(line -> Arrays.asList(line.split(COMMA)))
                 .toList();
 
