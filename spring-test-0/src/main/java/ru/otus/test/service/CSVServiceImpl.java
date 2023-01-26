@@ -20,8 +20,6 @@ public class CSVServiceImpl implements CSVService {
                 .map(line -> Arrays.asList(line.split(COMMA)))
                 .toList();
 
-        System.out.println(result);
-
         return result;
     }
 

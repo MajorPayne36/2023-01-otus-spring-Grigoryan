@@ -19,18 +19,23 @@ public class TestingServiceImpl implements TestingService {
     private final Person tester;
     private final TestRepository testRepository;
     private final CSVService csvService;
+    private final BufferedReader br;
 
     public TestingServiceImpl(TestRepository testRepository, CSVService csvService) {
         this.testRepository = testRepository;
         this.csvService = csvService;
+        this.br = new BufferedReader(new InputStreamReader(System.in));
         this.tester = registerTester();
     }
 
     @Override
-    public Person registerTester() {
+    public Person getTester() {
+        return this.tester;
+    }
+
+    private Person registerTester() {
 
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             System.out.println(GREETINGS);
             String name = br.readLine();
             return new Person(name);
@@ -41,10 +46,8 @@ public class TestingServiceImpl implements TestingService {
 
     }
 
-    @Override
-    public int askQuestion(Question question) {
+    private int askQuestion(Question question) {
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("-----------------------------");
             System.out.println(question.question());
             String currentAnswer = br.readLine();
