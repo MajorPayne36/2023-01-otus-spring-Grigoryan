@@ -3,6 +3,7 @@ package ru.otus.test.service;
 import ru.otus.test.dao.TestRepository;
 import ru.otus.test.domain.Person;
 import ru.otus.test.domain.Question;
+import ru.otus.test.exception.MyRuntimeException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,10 +11,10 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 public class TestingServiceImpl implements TestingService {
-    public static final String GREETINGS = "Hello to testing. Enter your name";
-    private final int CORRECT = 1;
+    private static final String GREETINGS = "Hello to testing. Enter your name";
+    private static final int CORRECT = 1;
     private static final int INCORRECT = 0;
-    public static final int START_BAL = 0;
+    private static final int START_BAL = 0;
 
     private final Person tester;
     private final TestRepository testRepository;
@@ -34,7 +35,7 @@ public class TestingServiceImpl implements TestingService {
             String name = br.readLine();
             return new Person(name);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new MyRuntimeException(e.getMessage());
         }
 
 
@@ -49,7 +50,7 @@ public class TestingServiceImpl implements TestingService {
             String currentAnswer = br.readLine();
             return question.answer().equals(currentAnswer) ? CORRECT : INCORRECT;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new MyRuntimeException(e.getMessage());
         }
     }
 

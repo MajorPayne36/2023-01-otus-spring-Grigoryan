@@ -2,6 +2,7 @@ package ru.otus.test.service;
 
 import org.springframework.core.io.ClassPathResource;
 import ru.otus.test.domain.Question;
+import ru.otus.test.exception.MyRuntimeException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,8 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CSVServiceImpl implements CSVService {
-    private final String COMMA = ",";
-    private final String TEST_FILE = "test.csv";
+    private static final String COMMA = ",";
+    private static final String TEST_FILE = "test.csv";
 
     @Override
     public List<List<String>> getFieldsFromCsvByLambda() throws IOException {
@@ -32,8 +33,7 @@ public class CSVServiceImpl implements CSVService {
                     .map(list -> new Question(list.get(0), list.get(1)))
                     .toList();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new MyRuntimeException(e.getMessage());
         }
     }
-
 }
