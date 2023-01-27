@@ -33,6 +33,17 @@ public class TestingServiceImpl implements TestingService {
         return this.tester;
     }
 
+    @Override
+    public void startTesting() {
+        int bal = START_BAL;
+        List<Question> questions = csvService.getQuestionsFromCSV();
+        for (Question question :
+                questions) {
+            bal += askQuestion(question);
+        }
+        testRepository.saveTestResult(this.tester, bal);
+    }
+
     private Person registerTester() {
 
         try {
@@ -55,15 +66,5 @@ public class TestingServiceImpl implements TestingService {
         } catch (IOException e) {
             throw new MyRuntimeException(e.getMessage());
         }
-    }
-
-    public void startTesting() {
-        int bal = START_BAL;
-        List<Question> questions = csvService.getQuestionsFromCSV();
-        for (Question question :
-                questions) {
-            bal += askQuestion(question);
-        }
-        testRepository.saveTestResult(this.tester, bal);
     }
 }

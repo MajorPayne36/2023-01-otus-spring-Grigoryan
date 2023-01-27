@@ -14,15 +14,6 @@ public class CSVServiceImpl implements CSVService {
     private static final String COMMA = ",";
     private static final String TEST_FILE = "test.csv";
 
-    private List<List<String>> getFieldsFromCsvByLambda() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(new ClassPathResource(TEST_FILE).getInputStream()));
-        List<List<String>> result = br.lines()
-                .map(line -> Arrays.asList(line.split(COMMA)))
-                .toList();
-
-        return result;
-    }
-
     @Override
     public List<Question> getQuestionsFromCSV() {
         try {
@@ -33,5 +24,14 @@ public class CSVServiceImpl implements CSVService {
         } catch (IOException e) {
             throw new MyRuntimeException(e.getMessage());
         }
+    }
+
+    private List<List<String>> getFieldsFromCsvByLambda() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(new ClassPathResource(TEST_FILE).getInputStream()));
+        List<List<String>> result = br.lines()
+                .map(line -> Arrays.asList(line.split(COMMA)))
+                .toList();
+
+        return result;
     }
 }
