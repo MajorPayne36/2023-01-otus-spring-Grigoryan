@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CSVServiceTest {
 
-    static CSVService csvService = new CSVServiceImpl();
+    static CSVService csvService = new CSVServiceImpl(new CSVReaderImpl());
 
     @Test
     void getQuestionsFromCSV_should_return_test() {

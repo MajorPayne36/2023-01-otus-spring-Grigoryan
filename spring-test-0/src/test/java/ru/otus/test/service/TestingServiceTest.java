@@ -25,7 +25,7 @@ class TestingServiceTest {
         redefineInputStream();
 
         // Создаем новый класс, где будет использоваться переопределяемый ввод
-        TestingService service = new TestingServiceImpl(new TestRepositoryImpl(), new CSVServiceImpl());
+        TestingService service = new TestingServiceImpl(new TestRepositoryImpl(), new CSVServiceImpl(new CSVReaderImpl()));
 
         // Вызываем регистрацию пользователя
         Person person = service.getTester();
@@ -44,7 +44,7 @@ class TestingServiceTest {
         System.setOut(new PrintStream(byteArrayOutputStream));
 
         // Создаем новый класс, где будет использоваться переопределяемый ввод
-        TestingService service = new TestingServiceImpl(new TestRepositoryImpl(), new CSVServiceImpl());
+        TestingService service = new TestingServiceImpl(new TestRepositoryImpl(), new CSVServiceImpl(new CSVReaderImpl()));
 
         // Вызываем регистрацию пользователя
         service.startTesting();
