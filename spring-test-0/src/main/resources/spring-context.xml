@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="testRepository" class="ru.otus.test.dao.TestRepositoryImpl"/>
+    <bean id="csvReader" class="ru.otus.test.service.CSVReaderImpl"/>
+    <bean id="csvService" class="ru.otus.test.service.CSVServiceImpl">
+        <constructor-arg ref="csvReader"/>
+    </bean>
+    <bean id="testingService" class="ru.otus.test.service.TestingServiceImpl">
+        <constructor-arg ref="testRepository"/>
+        <constructor-arg ref="csvService"/>
+    </bean>
+
+</beans>
