@@ -1,6 +1,7 @@
 package ru.otus.test.service;
 
-import ru.otus.test.dao.TestRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import ru.otus.test.domain.Person;
 import ru.otus.test.domain.Question;
 import ru.otus.test.exception.MyRuntimeException;
@@ -10,22 +11,26 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+@Service
+//@PropertySource("classpath:application.properties")
 public class TestingServiceImpl implements TestingService {
     private static final String GREETINGS = "Hello to testing. Enter your name";
-    private static final int CORRECT = 1;
-    private static final int INCORRECT = 0;
-    private static final int START_BAL = 0;
+    @Value("${tests.testing.bal.correct}")
+    private int correctBal;
+    @Value("${tests.testing.bal.incorrect}")
+    private int incorrectBal;
+    @Value("${tests.testing.bal.start}")
+    private int startBal;
+    @Value("${tests.testing.bal.threshold}")
+    private int thresholdBal;
 
-    private final Person tester;
-    private final TestRepository testRepository;
     private final CSVService csvService;
     private final BufferedReader br;
+    private Person tester;
 
-    public TestingServiceImpl(TestRepository testRepository, CSVService csvService) {
-        this.testRepository = testRepository;
+    public TestingServiceImpl(CSVService csvService) {
         this.csvService = csvService;
         this.br = new BufferedReader(new InputStreamReader(System.in));
-        this.tester = registerTester();
     }
 
     @Override
@@ -35,17 +40,25 @@ public class TestingServiceImpl implements TestingService {
 
     @Override
     public void startTesting() {
-        int bal = START_BAL;
+        this.tester = registerTester();
+        int bal = startBal;
         List<Question> questions = csvService.getQuestionsFromCSV();
         for (Question question :
                 questions) {
             bal += askQuestion(question);
         }
-        testRepository.saveTestResult(this.tester, bal);
+        showResult(bal);
+    }
+
+    private void showResult(int bal) {
+        if (bal >= thresholdBal) {
+            System.out.printf("Congratulations tester %s! Your bal %d", tester.name(), bal);
+        } else {
+            System.out.println("You haven't collected enough balls. Try again.");
+        }
     }
 
     private Person registerTester() {
-
         try {
             System.out.println(GREETINGS);
             String name = br.readLine();
@@ -53,8 +66,6 @@ public class TestingServiceImpl implements TestingService {
         } catch (IOException e) {
             throw new MyRuntimeException(e.getMessage());
         }
-
-
     }
 
     private int askQuestion(Question question) {
@@ -62,7 +73,7 @@ public class TestingServiceImpl implements TestingService {
             System.out.println("-----------------------------");
             System.out.println(question.question());
             String currentAnswer = br.readLine();
-            return question.answer().equals(currentAnswer) ? CORRECT : INCORRECT;
+            return question.answer().equals(currentAnswer) ? correctBal : incorrectBal;
         } catch (IOException e) {
             throw new MyRuntimeException(e.getMessage());
         }

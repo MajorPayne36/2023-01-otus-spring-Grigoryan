@@ -1,14 +1,19 @@
 package ru.otus.test.service;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import ru.otus.test.domain.Question;
 import ru.otus.test.exception.MyRuntimeException;
 
 import java.io.IOException;
 import java.util.List;
 
+@Service
 public class CSVServiceImpl implements CSVService {
-    private static final String COMMA = ",";
-    private static final String TEST_FILE = "test.csv";
+    @Value("${tests.csv.separator.comma}")
+    private String comma;
+    @Value("${tests.csv.file.name}")
+    private String testFile;
 
     private final CSVReader csvReader;
 
@@ -29,6 +34,6 @@ public class CSVServiceImpl implements CSVService {
     }
 
     private List<List<String>> getFieldsFromCsvByLambda() throws IOException {
-        return csvReader.getFieldsFromCsv(TEST_FILE, COMMA);
+        return csvReader.getFieldsFromCsv(testFile, comma);
     }
 }
