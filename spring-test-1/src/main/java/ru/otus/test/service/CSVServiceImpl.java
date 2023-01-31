@@ -10,12 +10,13 @@ import java.util.List;
 
 @Service
 public class CSVServiceImpl implements CSVService {
+
+    private final CSVReader csvReader;
     @Value("${tests.csv.separator.comma}")
     private String comma;
     @Value("${tests.csv.file.name}")
     private String testFile;
 
-    private final CSVReader csvReader;
 
     public CSVServiceImpl(CSVReader csvReader) {
         this.csvReader = csvReader;

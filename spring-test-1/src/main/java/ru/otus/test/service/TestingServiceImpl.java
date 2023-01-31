@@ -8,13 +8,15 @@ import ru.otus.test.exception.MyRuntimeException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 @Service
-//@PropertySource("classpath:application.properties")
 public class TestingServiceImpl implements TestingService {
     private static final String GREETINGS = "Hello to testing. Enter your name";
+    private static final String CONGRATULATIONS = "Congratulations tester %s! Your bal %d";
+    private static final String TRY_AGAIN = "You haven't collected enough balls. Try again.";
+    private final CSVService csvService;
+    private final BufferedReader br;
     @Value("${tests.testing.bal.correct}")
     private int correctBal;
     @Value("${tests.testing.bal.incorrect}")
@@ -23,14 +25,11 @@ public class TestingServiceImpl implements TestingService {
     private int startBal;
     @Value("${tests.testing.bal.threshold}")
     private int thresholdBal;
-
-    private final CSVService csvService;
-    private final BufferedReader br;
     private Person tester;
 
-    public TestingServiceImpl(CSVService csvService) {
+    public TestingServiceImpl(CSVService csvService, BufferedReader bufferedReader) {
         this.csvService = csvService;
-        this.br = new BufferedReader(new InputStreamReader(System.in));
+        this.br = bufferedReader;
     }
 
     @Override
@@ -52,9 +51,9 @@ public class TestingServiceImpl implements TestingService {
 
     private void showResult(int bal) {
         if (bal >= thresholdBal) {
-            System.out.printf("Congratulations tester %s! Your bal %d", tester.name(), bal);
+            System.out.printf(CONGRATULATIONS, tester.name(), bal);
         } else {
-            System.out.println("You haven't collected enough balls. Try again.");
+            System.out.println(TRY_AGAIN);
         }
     }
 
