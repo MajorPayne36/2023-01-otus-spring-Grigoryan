@@ -1,13 +1,14 @@
 package ru.otus.test;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import ru.otus.test.service.TestingService;
 
+@ComponentScan
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("*************************************");
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
         TestingService testingService = context.getBean(TestingService.class);
         testingService.startTesting();
     }
