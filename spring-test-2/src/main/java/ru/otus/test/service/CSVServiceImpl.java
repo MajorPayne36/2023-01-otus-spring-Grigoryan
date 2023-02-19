@@ -1,20 +1,20 @@
 package ru.otus.test.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import ru.otus.test.config.AppProps;
 import ru.otus.test.domain.Question;
 import ru.otus.test.exception.MyRuntimeException;
 
 import java.io.IOException;
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class CSVServiceImpl implements CSVService {
-    private static final String COMMA = ",";
-    private static final String TEST_FILE = "test.csv";
 
     private final CSVReader csvReader;
-
-    public CSVServiceImpl(CSVReader csvReader) {
-        this.csvReader = csvReader;
-    }
+    private final AppProps appProps;
 
     @Override
     public List<Question> getQuestionsFromCSV() {
@@ -29,6 +29,6 @@ public class CSVServiceImpl implements CSVService {
     }
 
     private List<List<String>> getFieldsFromCsvByLambda() throws IOException {
-        return csvReader.getFieldsFromCsv(TEST_FILE, COMMA);
+        return csvReader.getFieldsFromCsv(appProps.testingProps().testFile(), appProps.fileProps().separator());
     }
 }

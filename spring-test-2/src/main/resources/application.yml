@@ -1,0 +1,26 @@
+spring:
+  messages:
+    basename: "i18n/appmessages"
+    encoding: "UTF-8"
+  banner:
+    location: classpath:banner.txt
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, beans
+
+server:
+  port: 8080
+
+application:
+  file:
+    separator: ","
+  testing:
+    test-file: "test.csv"
+    correct: 1
+    incorrect: 0
+    start-bal: 0
+    threshold: 2
+  locale: ru_RU

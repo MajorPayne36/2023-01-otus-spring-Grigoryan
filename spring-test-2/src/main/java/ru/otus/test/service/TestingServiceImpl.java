@@ -1,32 +1,29 @@
 package ru.otus.test.service;
 
-import ru.otus.test.dao.TestRepository;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+import ru.otus.test.config.AppProps;
 import ru.otus.test.domain.Person;
 import ru.otus.test.domain.Question;
 import ru.otus.test.exception.MyRuntimeException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class TestingServiceImpl implements TestingService {
-    private static final String GREETINGS = "Hello to testing. Enter your name";
-    private static final int CORRECT = 1;
-    private static final int INCORRECT = 0;
-    private static final int START_BAL = 0;
+    private static final Logger logger = LoggerFactory.getLogger(TestingServiceImpl.class);
 
-    private final Person tester;
-    private final TestRepository testRepository;
+    private final AppProps appProps;
+    private final MessageSource messageSource;
     private final CSVService csvService;
     private final BufferedReader br;
-
-    public TestingServiceImpl(TestRepository testRepository, CSVService csvService) {
-        this.testRepository = testRepository;
-        this.csvService = csvService;
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-        this.tester = registerTester();
-    }
+    private Person tester;
 
     @Override
     public Person getTester() {
@@ -35,34 +32,43 @@ public class TestingServiceImpl implements TestingService {
 
     @Override
     public void startTesting() {
-        int bal = START_BAL;
+        this.tester = registerTester();
+        int bal = appProps.testingProps().startBal();
         List<Question> questions = csvService.getQuestionsFromCSV();
         for (Question question :
                 questions) {
             bal += askQuestion(question);
         }
-        testRepository.saveTestResult(this.tester, bal);
+        showResult(bal);
+    }
+
+    private void showResult(int bal) {
+        var congratulation = messageSource.getMessage("testing.congratulation", new Object[]{tester.name(), bal}, appProps.locale());
+        var tryAgain = messageSource.getMessage("testing.try-again", null, appProps.locale());
+        if (bal >= appProps.testingProps().threshold()) {
+            logger.info(congratulation);
+        } else {
+            logger.info(tryAgain);
+        }
     }
 
     private Person registerTester() {
-
         try {
-            System.out.println(GREETINGS);
+            var greetings = messageSource.getMessage("testing.welcome", null, appProps.locale());
+            logger.info(greetings);
             String name = br.readLine();
             return new Person(name);
         } catch (IOException e) {
             throw new MyRuntimeException(e.getMessage());
         }
-
-
     }
 
     private int askQuestion(Question question) {
         try {
-            System.out.println("-----------------------------");
-            System.out.println(question.question());
+            logger.info("-----------------------------");
+            logger.info(question.question());
             String currentAnswer = br.readLine();
-            return question.answer().equals(currentAnswer) ? CORRECT : INCORRECT;
+            return question.answer().equals(currentAnswer) ? appProps.testingProps().correct() : appProps.testingProps().incorrect();
         } catch (IOException e) {
             throw new MyRuntimeException(e.getMessage());
         }
