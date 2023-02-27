@@ -1,4 +1,3 @@
-Person Name
 spr
 4
 a

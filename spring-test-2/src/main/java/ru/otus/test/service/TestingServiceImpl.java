@@ -32,20 +32,14 @@ public class TestingServiceImpl implements TestingService {
         return this.tester;
     }
 
-    private Person registerTester() {
-        try {
-            var greetings = messageSource.getMessage("testing.welcome", null, appProps.getLocale());
-            logger.info(greetings);
-            String name = br.readLine();
-            return new Person(name);
-        } catch (IOException e) {
-            throw new MyRuntimeException(e.getMessage());
-        }
+    @Override
+    public void registerTester(Person tester) {
+        this.tester = tester;
     }
 
     @Override
     public void startTesting() {
-        this.tester = registerTester();
+//        this.tester = registerTester();
         int bal = appProps.getStartBal();
         List<Question> questions = csvService.getQuestionsFromCSV();
         for (Question question :

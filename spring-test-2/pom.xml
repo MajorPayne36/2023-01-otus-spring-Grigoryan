@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.3</version>
+        <version>3.0.2</version>
     </parent>
 
     <properties>
@@ -21,12 +21,19 @@
         <minimal.maven.version>3.3.9</minimal.maven.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.shell.version>3.0.0</spring.shell.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.shell</groupId>
+            <artifactId>spring-shell-starter</artifactId>
+            <version>${spring.shell.version}</version>
         </dependency>
 
         <dependency>
