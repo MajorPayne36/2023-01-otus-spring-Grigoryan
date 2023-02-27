@@ -2,7 +2,7 @@ package ru.otus.test.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.test.config.AppProps;
+import ru.otus.test.config.props.AppProps;
 import ru.otus.test.domain.Question;
 import ru.otus.test.exception.MyRuntimeException;
 
@@ -29,6 +29,6 @@ public class CSVServiceImpl implements CSVService {
     }
 
     private List<List<String>> getFieldsFromCsvByLambda() throws IOException {
-        return csvReader.getFieldsFromCsv(appProps.testingProps().testFile(), appProps.fileProps().separator());
+        return csvReader.getFieldsFromCsv(appProps.getTestFile(), appProps.getSeparator());
     }
 }

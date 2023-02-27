@@ -15,12 +15,10 @@ server:
   port: 8080
 
 application:
-  file:
-    separator: ","
-  testing:
-    test-file: "test.csv"
-    correct: 1
-    incorrect: 0
-    start-bal: 0
-    threshold: 2
   locale: ru_RU
+  test-file: "test_${application.locale}.csv"
+  separator: ","
+  correct: 1
+  incorrect: 0
+  start-bal: 0
+  threshold: 2
