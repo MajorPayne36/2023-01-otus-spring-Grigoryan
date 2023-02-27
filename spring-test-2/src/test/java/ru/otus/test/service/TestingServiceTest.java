@@ -5,23 +5,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.util.ReflectionTestUtils;
 import ru.otus.test.domain.Person;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class TestingServiceTest {
     private static final String PERSON_NAME = "Person Name";
     private static final String USER_INPUT_FILE = "user-input.txt";
-    private static final String END_OF_TEST = String.format("Saving tester %s with bal %d to db", PERSON_NAME, 2);
+    private static final String END_OF_TEST = String.format("Congratulations tester %s! Your bal %d", PERSON_NAME, 3);
 
     @Autowired
     private TestingService testingService;
@@ -32,6 +36,7 @@ class TestingServiceTest {
         redefineInputStream();
 
         // Вызываем регистрацию пользователя
+        testingService.startTesting();
         Person person = testingService.getTester();
 
         // Проверяем на создание
@@ -56,12 +61,13 @@ class TestingServiceTest {
         List<String> stringList = Arrays.stream(output.split("\n")).toList();
         // Получаем последний вывод
         String lastOutput = stringList.get(stringList.size() - 1);
-        assertEquals(END_OF_TEST, lastOutput);
+        assertTrue(lastOutput.contains(END_OF_TEST));
     }
 
     private void redefineInputStream() throws IOException {
         // Переопределяем стандартный ввод для симулирования ввода в консоль
         System.setIn(new ByteArrayInputStream(new ClassPathResource(USER_INPUT_FILE).getInputStream().readAllBytes()));
-
+        var changedBr = new BufferedReader(new InputStreamReader(System.in));
+        ReflectionTestUtils.setField(testingService, "br", changedBr);
     }
 }

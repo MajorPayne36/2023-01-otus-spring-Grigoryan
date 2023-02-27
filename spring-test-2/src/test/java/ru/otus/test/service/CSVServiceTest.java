@@ -7,7 +7,7 @@ import ru.otus.test.domain.Question;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class CSVServiceTest {
@@ -17,7 +17,7 @@ class CSVServiceTest {
     @Test
     void getQuestionsFromCSV_should_return_test() {
         List<Question> questions = csvService.getQuestionsFromCSV();
-        assertEquals("test question", questions.get(0).question());
-        assertEquals("test answer", questions.get(0).answer());
+        assertThat(questions.get(0).question()).isEqualTo("what framework i use in this project?");
+        assertThat(questions.get(0).answer()).isEqualTo("spring");
     }
 }
