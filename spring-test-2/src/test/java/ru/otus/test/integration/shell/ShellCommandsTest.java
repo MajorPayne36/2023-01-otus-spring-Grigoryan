@@ -1,4 +1,4 @@
-package ru.otus.test.shell;
+package ru.otus.test.integration.shell;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
