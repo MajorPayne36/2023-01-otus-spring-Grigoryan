@@ -16,18 +16,4 @@ public class AppProps {
     private Integer incorrect;
     private Integer startBal;
     private Integer threshold;
-//    @Data
-//    static class TestingProps {
-//        private String testFile;
-//        private Integer correct;
-//        private Integer incorrect;
-//        private Integer startBal;
-//        private Integer threshold;
-//    }
-//
-//    @Data
-//    static class FileProps {
-//        private String separator;
-//    }
-
 }
