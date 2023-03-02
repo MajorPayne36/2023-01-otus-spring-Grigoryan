@@ -1,4 +1,4 @@
-package ru.otus.test.service;
+package ru.otus.test.integration;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.util.ReflectionTestUtils;
 import ru.otus.test.domain.Person;
+import ru.otus.test.service.TestingService;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
