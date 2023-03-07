@@ -1,0 +1,29 @@
+spring:
+  shell:
+    interactive:
+      enabled: true
+  main:
+    allow-circular-references: true
+  messages:
+    basename: "i18n/appmessages"
+    encoding: "UTF-8"
+  banner:
+    location: classpath:banner.txt
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, beans
+
+server:
+  port: 8080
+
+application:
+  locale: ru_RU
+  test-file: "test_${application.locale}.csv"
+  separator: ","
+  correct: 1
+  incorrect: 0
+  start-bal: 0
+  threshold: 2
