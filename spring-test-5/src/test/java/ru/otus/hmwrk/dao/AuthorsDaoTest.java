@@ -87,6 +87,8 @@ class AuthorsDaoTest {
         List<Author> res = authorsDao.findAllAuthorsByBookId(bookId);
 
         // then
-        assertThat(res).isEqualTo(listOfAuthors);
+        assertThat(res)
+                .usingRecursiveComparison()
+                .isEqualTo(listOfAuthors);
     }
 }
