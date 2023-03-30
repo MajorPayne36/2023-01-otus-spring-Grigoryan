@@ -12,8 +12,4 @@ public interface GenreService {
     Optional<Genre> findById(Long id);
 
     Optional<Genre> save(Genre entity);
-
-    List<Genre> findAllGenresByBookId(Long bookId);
-
-    void saveWithBookId(Genre genre, Long bookId);
 }

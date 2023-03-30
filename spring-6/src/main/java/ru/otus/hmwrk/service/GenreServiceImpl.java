@@ -2,6 +2,7 @@ package ru.otus.hmwrk.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hmwrk.dao.GenresDao;
 import ru.otus.hmwrk.entity.Genre;
 
@@ -15,30 +16,20 @@ public class GenreServiceImpl implements GenreService {
     private final GenresDao genresDao;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Genre> findAll() {
         return genresDao.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Genre> findById(Long id) {
         return Optional.ofNullable(genresDao.findById(id));
     }
 
     @Override
+    @Transactional
     public Optional<Genre> save(Genre entity) {
         return Optional.ofNullable(genresDao.save(entity));
-    }
-
-    @Override
-    public List<Genre> findAllGenresByBookId(Long bookId) {
-        return genresDao.findAllGenresByBookId(bookId);
-    }
-
-    @Override
-    public void saveWithBookId(Genre genre, Long bookId) {
-        if (findById(genre.getId()).isEmpty()) {
-            genresDao.save(genre);
-        }
-        genresDao.connectToBook(genre.getId(), bookId);
     }
 }

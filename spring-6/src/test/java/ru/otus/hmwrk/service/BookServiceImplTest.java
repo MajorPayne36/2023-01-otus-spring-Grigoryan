@@ -40,14 +40,6 @@ class BookServiceImplTest {
         lenient().when(booksDao.findAll()).thenReturn(List.of(book));
         lenient().when(booksDao.findById(anyLong())).thenReturn(book);
         lenient().when(booksDao.save(any())).thenReturn(book);
-        lenient().when(authorService.findAllAuthorsByBookId(anyLong())).thenReturn(List.of(new Author()
-                .setId(3L)
-                .setFirstName("Ivan")
-                .setLastName("Fomich")
-                .setBirthday(LocalDate.parse("2003-10-29"))));
-        lenient().when(genreService.findAllGenresByBookId(anyLong())).thenReturn(List.of(new Genre()
-                .setId(1L)
-                .setName("comedia")));
     }
 
     @Test
@@ -75,15 +67,5 @@ class BookServiceImplTest {
 
         // then
         assertThat(res.orElseGet(null).getId()).isEqualTo(book.getId());
-    }
-
-    @Test
-    void extendBookWithAuthorsAndGenres() {
-        // when
-        var res = bookService.extendBookWithAuthorsAndGenres(book);
-
-        // then
-        assertThat(res.getAuthors().get(0).getFirstName()).isEqualTo("Ivan");
-        assertThat(res.getGenres().get(0).getName()).isEqualTo("comedia");
     }
 }

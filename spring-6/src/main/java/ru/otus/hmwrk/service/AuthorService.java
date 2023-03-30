@@ -12,8 +12,4 @@ public interface AuthorService {
     Optional<Author> findById(Long id);
 
     Optional<Author> save(Author entity);
-
-    List<Author> findAllAuthorsByBookId(Long bookId);
-
-    void saveWithBookId(Author author, Long bookId);
 }
