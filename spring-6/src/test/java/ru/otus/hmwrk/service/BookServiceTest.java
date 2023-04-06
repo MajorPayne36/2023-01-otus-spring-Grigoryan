@@ -6,10 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.hmwrk.dao.BooksDao;
-import ru.otus.hmwrk.entity.Author;
+import ru.otus.hmwrk.dao.BooksRepository;
 import ru.otus.hmwrk.entity.Book;
-import ru.otus.hmwrk.entity.Genre;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,20 +18,20 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
-class BookServiceImplTest {
+class BookServiceTest {
     private final Book book = new Book()
             .setId(1L)
             .setName("book 1")
             .setPublicationDate(LocalDate.parse("2023-02-11"));
 
     @Mock
-    private BooksDao booksDao;
+    private BooksRepository booksDao;
     @Mock
     private AuthorService authorService;
     @Mock
     private GenreService genreService;
     @InjectMocks
-    private BookServiceImpl bookService;
+    private BookService bookService;
 
     @BeforeEach
     void mockAll() {

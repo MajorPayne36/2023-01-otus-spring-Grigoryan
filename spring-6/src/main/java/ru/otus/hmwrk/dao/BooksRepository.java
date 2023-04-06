@@ -1,24 +1,28 @@
 package ru.otus.hmwrk.dao;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.hmwrk.entity.Book;
+import ru.otus.hmwrk.exceptions.NotValidIdentifierException;
 
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.Objects.nonNull;
 
 
 /**
  * Класс сохраняющий сущности типа {@link Book}.
  */
 @Log4j2
-@Repository
+@Component
 @RequiredArgsConstructor
-public class BooksDao implements Dao<Book, Long> {
+public class BooksRepository implements Repository<Book, Long> {
 
     @PersistenceContext
     private final EntityManager em;
@@ -46,12 +50,15 @@ public class BooksDao implements Dao<Book, Long> {
 
     @Override
     public void updateNameById(Long id, String name) {
-        Query query = em.createQuery("update Book b " +
-                "set b.name = :name " +
-                "where b.id = :id");
-        query.setParameter("name", name);
-        query.setParameter("id", id);
-        query.executeUpdate();
+        if (nonNull(id)){
+            var book = Optional.ofNullable(findById(id))
+                    .orElseThrow(() -> new EntityNotFoundException("Entity with id: " + id + "not found"));
+
+            book.setName(name);
+            em.merge(book);
+        } else {
+            throw new NotValidIdentifierException(id);
+        }
     }
 
     @Override

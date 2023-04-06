@@ -14,16 +14,16 @@ import java.util.function.Predicate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({AuthorsDao.class})
+@Import({AuthorsRepository.class})
 @SqlGroup({
         @Sql(scripts = "classpath:schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
         @Sql(scripts = "classpath:data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
         @Sql(scripts = "classpath:reset.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 })
-class AuthorsDaoTest {
+class AuthorsRepositoryTest {
 
     @Autowired
-    private AuthorsDao authorsDao;
+    private AuthorsRepository authorsDao;
 
     @Test
     void testFindAll() {

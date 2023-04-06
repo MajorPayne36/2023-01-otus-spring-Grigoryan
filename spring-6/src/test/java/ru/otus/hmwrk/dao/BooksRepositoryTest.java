@@ -15,12 +15,12 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({BooksDao.class, AuthorsDao.class})
-class BooksDaoTest {
+@Import({BooksRepository.class, AuthorsRepository.class})
+class BooksRepositoryTest {
     private static final String BOOK_NAME = "book 1";
 
     @Autowired
-    private BooksDao booksDao;
+    private BooksRepository booksDao;
 
     @Test
     @SqlGroup({

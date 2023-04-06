@@ -1,11 +1,8 @@
 package ru.otus.hmwrk.dao;
 
-import ru.otus.hmwrk.entity.Book;
-
 import java.util.List;
-import java.util.Optional;
 
-public interface Dao<T, ID> {
+public interface Repository<T, ID> {
     List<T> findAll();
     T findById(ID id);
 

@@ -3,17 +3,19 @@ package ru.otus.hmwrk.dao;
 import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.hmwrk.entity.Genre;
+import ru.otus.hmwrk.exceptions.NotValidIdentifierException;
 
 import java.util.List;
 
-@Repository
+import static java.util.Objects.nonNull;
+
+@Component
 @RequiredArgsConstructor
-public class GenresDao implements Dao<Genre, Long> {
+public class GenresRepository implements Repository<Genre, Long> {
 
     @PersistenceContext
     private final EntityManager em;
@@ -44,12 +46,13 @@ public class GenresDao implements Dao<Genre, Long> {
 
     @Override
     public void updateNameById(Long id, String name) {
-        Query query = em.createQuery("update Genre g " +
-                "set g.name = :name " +
-                "where g.id = :id");
-        query.setParameter("name", name);
-        query.setParameter("id", id);
-        query.executeUpdate();
+        if (nonNull(id)){
+        var genre = findById(id);
+            genre.setName(name);
+            em.merge(genre);
+        } else {
+            throw new NotValidIdentifierException(id);
+        }
     }
 
     @Override
