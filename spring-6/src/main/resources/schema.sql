@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS books_id_genres_id;
 DROP TABLE IF EXISTS books_id_authors_id;
+DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS authors;
 DROP TABLE IF EXISTS books;
 DROP TABLE IF EXISTS genres;
@@ -15,28 +16,28 @@ CREATE SEQUENCE IF NOT EXISTS book_seq START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE IF NOT EXISTS books
 (
-    id               bigint PRIMARY KEY NOT NULL DEFAULT NEXTVAL('BOOK_SEQ'),
-    name             varchar            NOT NULL,
-    publication_date date               NOT NULL
+    id               bigint  NOT NULL DEFAULT NEXTVAL('BOOK_SEQ') PRIMARY KEY,
+    name             varchar NOT NULL,
+    publication_date date    NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS authors
 (
-    id         bigint PRIMARY KEY NOT NULL DEFAULT NEXTVAL('AUTHOR_SEQ'),
-    first_name varchar            NOT NULL,
-    last_name  varchar            NOT NULL,
+    id         bigint  NOT NULL DEFAULT NEXTVAL('AUTHOR_SEQ') PRIMARY KEY,
+    first_name varchar NOT NULL,
+    last_name  varchar NOT NULL,
     birthday   date
 );
 
 CREATE TABLE IF NOT EXISTS genres
 (
-    id   bigint PRIMARY KEY NOT NULL DEFAULT NEXTVAL('GENRE_SEQ'),
-    name varchar            NOT NULL
+    id   bigint  NOT NULL DEFAULT NEXTVAL('GENRE_SEQ') PRIMARY KEY,
+    name varchar NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS comments
 (
-    id      bigint PRIMARY KEY           NOT NULL DEFAULT NEXTVAL('COMMENT_SEQ'),
+    id      bigint                       NOT NULL DEFAULT NEXTVAL('COMMENT_SEQ') PRIMARY KEY,
     content varchar                      NOT NULL,
     book_id bigint REFERENCES books (id) NOT NULL
 );

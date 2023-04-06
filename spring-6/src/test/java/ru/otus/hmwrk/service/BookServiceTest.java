@@ -25,19 +25,15 @@ class BookServiceTest {
             .setPublicationDate(LocalDate.parse("2023-02-11"));
 
     @Mock
-    private BooksRepository booksDao;
-    @Mock
-    private AuthorService authorService;
-    @Mock
-    private GenreService genreService;
+    private BooksRepository booksRepository;
     @InjectMocks
     private BookService bookService;
 
     @BeforeEach
     void mockAll() {
-        lenient().when(booksDao.findAll()).thenReturn(List.of(book));
-        lenient().when(booksDao.findById(anyLong())).thenReturn(book);
-        lenient().when(booksDao.save(any())).thenReturn(book);
+        lenient().when(booksRepository.findAll()).thenReturn(List.of(book));
+        lenient().when(booksRepository.findById(anyLong())).thenReturn(book);
+        lenient().when(booksRepository.save(any())).thenReturn(book);
     }
 
     @Test

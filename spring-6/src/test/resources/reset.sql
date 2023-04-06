@@ -2,6 +2,7 @@ DELETE FROM books_id_genres_id WHERE TRUE;
 DELETE FROM books_id_authors_id WHERE TRUE;
 DELETE FROM genres WHERE TRUE;
 DELETE FROM authors WHERE TRUE;
+DELETE FROM comments WHERE TRUE;
 DELETE FROM books WHERE TRUE;
 DROP SEQUENCE genre_seq;
 DROP SEQUENCE author_seq;
