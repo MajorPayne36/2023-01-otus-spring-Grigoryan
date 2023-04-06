@@ -1,0 +1,9 @@
+ru\otus\hmwrk\exceptions\NotValidIdentifierException.class
+ru\otus\hmwrk\dao\CommentsRepository.class
+ru\otus\hmwrk\dao\Repository.class
+ru\otus\hmwrk\service\CommonService.class
+ru\otus\hmwrk\dao\GenresRepository.class
+ru\otus\hmwrk\service\CommentService.class
+ru\otus\hmwrk\dao\BooksRepository.class
+ru\otus\hmwrk\dao\AuthorsRepository.class
+ru\otus\hmwrk\entity\Comment.class
