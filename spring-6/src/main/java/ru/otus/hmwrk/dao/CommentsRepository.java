@@ -1,22 +1,17 @@
 package ru.otus.hmwrk.dao;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.otus.hmwrk.entity.Comment;
-import ru.otus.hmwrk.exceptions.NotValidIdentifierException;
 
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
-public class CommentsRepository implements Repository<Comment, Long>{
+public class CommentsRepository implements Repository<Comment, Long> {
 
     @PersistenceContext
     private final EntityManager em;
@@ -40,19 +35,6 @@ public class CommentsRepository implements Repository<Comment, Long>{
                 Comment.class);
         query.setParameter("content", content);
         return query.getResultList();
-    }
-
-    @Override
-    public void updateNameById(Long id, String content) {
-        if (nonNull(id)){
-            var comment = Optional.ofNullable(findById(id))
-                    .orElseThrow(() -> new EntityNotFoundException("Entity with id: " + id + "not found"));
-
-            comment.setContent(content);
-            em.merge(comment);
-        } else {
-            throw new NotValidIdentifierException(id);
-        }
     }
 
     @Override

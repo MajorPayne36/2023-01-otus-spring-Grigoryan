@@ -1,13 +1,17 @@
 package ru.otus.hmwrk.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hmwrk.dao.GenresRepository;
 import ru.otus.hmwrk.entity.Genre;
+import ru.otus.hmwrk.exceptions.NotValidIdentifierException;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Objects.nonNull;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +25,6 @@ public class GenreService implements CommonService<Genre, Long> {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Genre> findById(Long id) {
         return Optional.ofNullable(genresRepository.findById(id));
     }
@@ -30,5 +33,18 @@ public class GenreService implements CommonService<Genre, Long> {
     @Transactional
     public Optional<Genre> save(Genre entity) {
         return Optional.ofNullable(genresRepository.save(entity));
+    }
+
+    @Override
+    @Transactional
+    public void updateNameById(Long id, String name) {
+        if (nonNull(id)) {
+            var genre = findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Entity with id: " + id + "not found"));
+            genre.setName(name);
+            save(genre);
+        } else {
+            throw new NotValidIdentifierException(id);
+        }
     }
 }

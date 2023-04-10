@@ -81,25 +81,18 @@ class AuthorsRepositoryTest {
     @Test
     void testSaveWithoutBook() {
         // given
-//        var book = booksDao.findByName(BOOK_NAME).get(0);
         var currentAuthor = new Author()
                 .setLastName("testname")
                 .setFirstName("testname")
                 .setBirthday(LocalDate.parse("2023-02-11"));
-
-//        currentAuthor.addBook(book);
-//        book.addAuthor(currentAuthor);
 
         // when
         var res = authorsDao.save(currentAuthor);
         var findSavedAuthor = authorsDao
                 .findByName(currentAuthor.getFirstName())
                 .get(0);
-//        var bookSaved = booksDao.findByName(BOOK_NAME).get(0);
-//        List<Author> authorFromUpdatedBook = bookSaved.getAuthors().stream().filter(containPredicate(res)).toList();
 
         // then
-//        assertThat(authorFromUpdatedBook).hasSize(1);
         assertThat(findSavedAuthor)
                 .usingRecursiveComparison()
                 .ignoringFields("id", "books")

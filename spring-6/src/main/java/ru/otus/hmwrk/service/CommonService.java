@@ -9,4 +9,6 @@ public interface CommonService <T, ID> {
     Optional<T> findById(ID id);
 
     Optional<T> save(T entity);
+
+    void updateNameById(Long id, String name);
 }

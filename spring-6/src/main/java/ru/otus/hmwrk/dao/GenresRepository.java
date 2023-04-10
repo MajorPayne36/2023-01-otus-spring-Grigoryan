@@ -7,11 +7,8 @@ import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.otus.hmwrk.entity.Genre;
-import ru.otus.hmwrk.exceptions.NotValidIdentifierException;
 
 import java.util.List;
-
-import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -42,17 +39,6 @@ public class GenresRepository implements Repository<Genre, Long> {
                 Genre.class);
         query.setParameter("name", name);
         return query.getResultList();
-    }
-
-    @Override
-    public void updateNameById(Long id, String name) {
-        if (nonNull(id)){
-        var genre = findById(id);
-            genre.setName(name);
-            em.merge(genre);
-        } else {
-            throw new NotValidIdentifierException(id);
-        }
     }
 
     @Override
