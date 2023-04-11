@@ -1,4 +1,4 @@
-package ru.otus.hmwrk.dao;
+package ru.otus.hmwrk.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +9,9 @@ import org.springframework.test.context.jdbc.SqlGroup;
 import ru.otus.hmwrk.entity.Author;
 
 import java.time.LocalDate;
-import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -31,7 +32,7 @@ class AuthorsRepositoryTest {
         var count = 4;
 
         // when
-        var res = authorsDao.findAll();
+        var res = StreamSupport.stream(authorsDao.findAll().spliterator(), false).collect(toList());
 
         // then
         assertThat(res).hasSize(count);
@@ -68,8 +69,8 @@ class AuthorsRepositoryTest {
 
         // when
         var res = authorsDao
-                .findByName(currentAuthor.getFirstName())
-                .get(0);
+                .findByFirstName(currentAuthor.getFirstName())
+                .orElse(null);
 
         // then
         assertThat(res)
@@ -81,34 +82,21 @@ class AuthorsRepositoryTest {
     @Test
     void testSaveWithoutBook() {
         // given
-//        var book = booksDao.findByName(BOOK_NAME).get(0);
         var currentAuthor = new Author()
                 .setLastName("testname")
                 .setFirstName("testname")
                 .setBirthday(LocalDate.parse("2023-02-11"));
 
-//        currentAuthor.addBook(book);
-//        book.addAuthor(currentAuthor);
-
         // when
         var res = authorsDao.save(currentAuthor);
         var findSavedAuthor = authorsDao
-                .findByName(currentAuthor.getFirstName())
-                .get(0);
-//        var bookSaved = booksDao.findByName(BOOK_NAME).get(0);
-//        List<Author> authorFromUpdatedBook = bookSaved.getAuthors().stream().filter(containPredicate(res)).toList();
+                .findByFirstName(currentAuthor.getFirstName())
+                .orElse(null);
 
         // then
-//        assertThat(authorFromUpdatedBook).hasSize(1);
         assertThat(findSavedAuthor)
                 .usingRecursiveComparison()
                 .ignoringFields("id", "books")
                 .isEqualTo(currentAuthor);
-    }
-
-    private Predicate<Author> containPredicate (Author authorForSearch) {
-        return author -> author.getBirthday().equals(authorForSearch.getBirthday()) &&
-                author.getLastName().equals(authorForSearch.getLastName()) &&
-                author.getFirstName().equals(authorForSearch.getFirstName());
     }
 }

@@ -2,33 +2,31 @@ package ru.otus.hmwrk.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hmwrk.dao.BooksRepository;
+import ru.otus.hmwrk.repository.BooksRepository;
 import ru.otus.hmwrk.entity.Book;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
-public class BookService implements CommonService<Book, Long> {
+public class BookService implements CrudService<Book, Long> {
 
     private final BooksRepository booksRepository;
 
     @Override
     public List<Book> findAll() {
-       return booksRepository.findAll();
+        return StreamSupport.stream(booksRepository.findAll().spliterator(), false).toList();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Book> findById(Long id) {
-        return Optional.ofNullable(booksRepository.findById(id));
+        return booksRepository.findById(id);
     }
 
     @Override
-    @Transactional
     public Optional<Book> save(Book entity) {
-        return Optional.ofNullable(booksRepository.save(entity));
+        return Optional.of(booksRepository.save(entity));
     }
 }

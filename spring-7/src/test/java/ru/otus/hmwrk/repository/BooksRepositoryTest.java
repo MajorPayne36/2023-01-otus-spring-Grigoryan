@@ -1,13 +1,13 @@
-package ru.otus.hmwrk.dao;
+package ru.otus.hmwrk.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import ru.otus.hmwrk.entity.Author;
 import ru.otus.hmwrk.entity.Book;
+import ru.otus.hmwrk.entity.Genre;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,25 +15,23 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({BooksRepository.class, AuthorsRepository.class})
 class BooksRepositoryTest {
     private static final String BOOK_NAME = "book 1";
 
     @Autowired
-    private BooksRepository booksDao;
+    private BooksRepository booksRepository;
 
     @Test
     @SqlGroup({
             @Sql(scripts = "classpath:schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-            @Sql(scripts = "classpath:reset.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
     void testFindAll() {
         // given
         var count = 5;
 
         // when
-        var res = booksDao.findAll();
+        var res = booksRepository.findAll();
 
         // then
         assertThat(res).hasSize(count);
@@ -43,7 +41,6 @@ class BooksRepositoryTest {
     @SqlGroup({
             @Sql(scripts = "classpath:schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-            @Sql(scripts = "classpath:reset.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
     void testFindById() {
         // given
@@ -66,7 +63,7 @@ class BooksRepositoryTest {
                 .setAuthors(listOfAuthors);
 
         // when
-        var res = booksDao.findById(currentBook.getId());
+        var res = booksRepository.findById(currentBook.getId()).orElse(null);
 
         // then
         assertThat(res)
@@ -79,7 +76,6 @@ class BooksRepositoryTest {
     @SqlGroup({
             @Sql(scripts = "classpath:schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-            @Sql(scripts = "classpath:reset.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
     void testFindByName() {
         // given
@@ -89,7 +85,7 @@ class BooksRepositoryTest {
                 .setPublicationDate(LocalDate.parse("2023-02-11"));
 
         // when
-        var res = booksDao.findByName(BOOK_NAME).get(0);
+        var res = booksRepository.findByName(BOOK_NAME).orElse(null);
 
         // then
         assertThat(res)
@@ -102,7 +98,6 @@ class BooksRepositoryTest {
     @SqlGroup({
             @Sql(scripts = "classpath:schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
             @Sql(scripts = "classpath:data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-            @Sql(scripts = "classpath:reset.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     })
     void testSave() {
         // given
@@ -112,11 +107,26 @@ class BooksRepositoryTest {
                 .setPublicationDate(LocalDate.parse("2023-02-16"));
 
         // when
-        var res = booksDao.save(currentBook);
+        var res = booksRepository.save(currentBook);
 
         // then
         assertThat(res)
                 .usingRecursiveComparison()
                 .isEqualTo(currentBook);
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "classpath:schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+            @Sql(scripts = "classpath:data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
+    })
+    void testCountAllByGenresGroupByGenres() {
+        // given
+        var genre = new Genre().setId(1L);
+
+        // when
+        var res = booksRepository.countByGenresId(1L);
+
+        assertThat(res).isEqualTo(3L);
     }
 }

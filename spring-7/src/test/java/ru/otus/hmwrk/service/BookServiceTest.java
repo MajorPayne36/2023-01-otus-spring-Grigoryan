@@ -6,11 +6,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.hmwrk.dao.BooksRepository;
+import ru.otus.hmwrk.repository.BooksRepository;
 import ru.otus.hmwrk.entity.Book;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,7 +33,7 @@ class BookServiceTest {
     @BeforeEach
     void mockAll() {
         lenient().when(booksRepository.findAll()).thenReturn(List.of(book));
-        lenient().when(booksRepository.findById(anyLong())).thenReturn(book);
+        lenient().when(booksRepository.findById(anyLong())).thenReturn(Optional.of(book));
         lenient().when(booksRepository.save(any())).thenReturn(book);
     }
 

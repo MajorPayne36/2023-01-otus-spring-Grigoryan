@@ -2,33 +2,31 @@ package ru.otus.hmwrk.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hmwrk.dao.GenresRepository;
+import ru.otus.hmwrk.repository.GenresRepository;
 import ru.otus.hmwrk.entity.Genre;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
-public class GenreService implements CommonService<Genre, Long> {
+public class GenreService implements CrudService<Genre, Long> {
 
     private final GenresRepository genresRepository;
 
     @Override
     public List<Genre> findAll() {
-        return genresRepository.findAll();
+        return StreamSupport.stream(genresRepository.findAll().spliterator(), false).toList();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Genre> findById(Long id) {
-        return Optional.ofNullable(genresRepository.findById(id));
+        return genresRepository.findById(id);
     }
 
     @Override
-    @Transactional
     public Optional<Genre> save(Genre entity) {
-        return Optional.ofNullable(genresRepository.save(entity));
+        return Optional.of(genresRepository.save(entity));
     }
 }
