@@ -1,5 +1,6 @@
 package ru.otus.hmwrk.repository;
 
+import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -9,13 +10,13 @@ import org.springframework.test.context.jdbc.SqlGroup;
 import ru.otus.hmwrk.entity.Author;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({AuthorsRepository.class})
 @SqlGroup({
         @Sql(scripts = "classpath:schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
         @Sql(scripts = "classpath:data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
@@ -49,7 +50,7 @@ class AuthorsRepositoryTest {
                 .setBirthday(LocalDate.parse("2003-10-29"));
 
         // when
-        var res = authorsDao.findById(currentAuthor.getId());
+        var res = authorsDao.findById(currentAuthor.getId()).orElse(null);
 
         // then
         assertThat(res)
@@ -59,7 +60,7 @@ class AuthorsRepositoryTest {
     }
 
     @Test
-    void testFindByName() {
+    void testFindByFirstNameAndLastName() {
         // given
         var currentAuthor = new Author()
                 .setId(3L)
@@ -69,11 +70,13 @@ class AuthorsRepositoryTest {
 
         // when
         var res = authorsDao
-                .findByFirstName(currentAuthor.getFirstName())
+                .findByFirstNameAndLastName(currentAuthor.getFirstName(), currentAuthor.getLastName())
                 .orElse(null);
 
         // then
         assertThat(res)
+                .hasSize(1)
+                .element(0)
                 .usingRecursiveComparison()
                 .ignoringFields("books", "id")
                 .isEqualTo(currentAuthor);
@@ -90,11 +93,13 @@ class AuthorsRepositoryTest {
         // when
         var res = authorsDao.save(currentAuthor);
         var findSavedAuthor = authorsDao
-                .findByFirstName(currentAuthor.getFirstName())
+                .findByFirstNameAndLastName(currentAuthor.getFirstName(), currentAuthor.getLastName())
                 .orElse(null);
 
         // then
         assertThat(findSavedAuthor)
+                .hasSize(1)
+                .element(0)
                 .usingRecursiveComparison()
                 .ignoringFields("id", "books")
                 .isEqualTo(currentAuthor);
