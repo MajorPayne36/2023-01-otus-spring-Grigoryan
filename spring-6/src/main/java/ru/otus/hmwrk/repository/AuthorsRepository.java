@@ -1,4 +1,4 @@
-package ru.otus.hmwrk.dao;
+package ru.otus.hmwrk.repository;
 
 import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;

@@ -8,6 +8,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import ru.otus.hmwrk.entity.Author;
 import ru.otus.hmwrk.entity.Book;
+import ru.otus.hmwrk.repository.AuthorsRepository;
+import ru.otus.hmwrk.repository.BooksRepository;
 
 import java.time.LocalDate;
 import java.util.List;

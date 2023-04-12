@@ -1,4 +1,4 @@
-package ru.otus.hmwrk.dao;
+package ru.otus.hmwrk.repository;
 
 import java.util.List;
 

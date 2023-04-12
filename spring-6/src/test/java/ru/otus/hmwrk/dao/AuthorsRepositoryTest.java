@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import ru.otus.hmwrk.entity.Author;
+import ru.otus.hmwrk.repository.AuthorsRepository;
 
 import java.time.LocalDate;
 import java.util.function.Predicate;
