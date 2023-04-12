@@ -63,8 +63,7 @@ public class Book {
     @BatchSize(size = 500)
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "books_id_genres_id", joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @JoinColumn(name = "id")
     private List<Comment> comments = new ArrayList<>();
 
     public Boolean addAuthor(Author author) {

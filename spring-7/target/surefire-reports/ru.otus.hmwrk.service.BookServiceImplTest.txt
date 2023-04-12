@@ -1,7 +1,0 @@
--------------------------------------------------------------------------------
-Test set: ru.otus.hmwrk.service.BookServiceImplTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.001 s <<< FAILURE! - in ru.otus.hmwrk.service.BookServiceImplTest
-ru.otus.hmwrk.service.BookServiceImplTest  Time elapsed: 0.001 s  <<< ERROR!
-java.lang.IncompatibleClassChangeError: class ru.otus.hmwrk.service.BookServiceImpl can not implement ru.otus.hmwrk.service.BookService, because it is not an interface (ru.otus.hmwrk.service.BookService is in unnamed module of loader 'app')
-

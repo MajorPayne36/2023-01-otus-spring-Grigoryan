@@ -1,13 +1,18 @@
 package ru.otus.hmwrk.shell;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hmwrk.entity.Book;
+import ru.otus.hmwrk.entity.Comment;
 import ru.otus.hmwrk.service.BookService;
 
 import java.time.LocalDate;
+
+import static java.util.stream.Collectors.joining;
 
 @ShellComponent
 @RequiredArgsConstructor
@@ -22,6 +27,15 @@ public class BookShell {
     @ShellMethod(value = "Get Book by id", key = {"fbi", "findById"})
     public String findById(@ShellOption Long id) {
         return bookService.findById(id).toString();
+    }
+
+    @Transactional(readOnly = true)
+    @ShellMethod(value = "Get Book by id", key = {"fcbi", "findCommentsByBookId"})
+    public String findCommentsByBookId(@ShellOption Long id) {
+        return bookService.findById(id)
+                .map(Book::getComments)
+                .map(e -> e.stream().map(Comment::getContent).map(s-> "Comment: " + s + "\n").collect(joining()))
+                .orElse(Strings.EMPTY);
     }
 
     @ShellMethod(value = "Save Book", key = {"save", "s"})
