@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hmwrk.dao.GenresRepository;
+import ru.otus.hmwrk.repository.GenresRepository;
 import ru.otus.hmwrk.entity.Genre;
 import ru.otus.hmwrk.exceptions.NotValidIdentifierException;
 

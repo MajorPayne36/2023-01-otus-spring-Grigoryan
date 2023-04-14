@@ -3,8 +3,7 @@ package ru.otus.hmwrk.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hmwrk.dao.BooksRepository;
+import ru.otus.hmwrk.repository.BooksRepository;
 import ru.otus.hmwrk.entity.Book;
 import ru.otus.hmwrk.exceptions.NotValidIdentifierException;
 
