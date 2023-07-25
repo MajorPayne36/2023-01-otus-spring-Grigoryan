@@ -1,0 +1,220 @@
+openapi: 3.0.3
+info:
+  title: 'Единая безопасная авторизация'
+  version: 1.0.0
+  description: 'Запросы ЕБА'
+  contact:
+    name: 'Григорян Андраник Вачаганович'
+    url: 'https://t.me/grigland1'
+    email: agrigya@ya.ru
+servers:
+  - url: 'https://127.0.0.1:7887'
+    description: localhost
+tags:
+  - name: Person
+    description: 'The Persons API'
+  - name: Verification
+    description: 'The Verification API'
+
+paths:
+  /api/v1/eba/users:
+    get:
+      tags:
+        - Person
+      summary: 'Сохрфнение/Обновление пользователей'
+      description: 'Сохраняет или обновляет переданного пользователя'
+      operationId: getAll
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersonDto'
+    post:
+      tags:
+        - Person
+      summary: 'Сохрфнение/Обновление пользователей'
+      description: 'Сохраняет или обновляет переданного пользователя'
+      operationId: savePerson
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDto'
+
+  /api/v1/eba/verify:
+    post:
+      tags:
+        - Verification
+      summary: 'Сохрфнение/Обновление пользователей'
+      description: 'Сохраняет или обновляет переданного пользователя'
+      operationId: verify
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResultDto'
+
+
+components:
+  schemas:
+
+    VerificationDto:
+      title: Верификация
+      description: дтошка проверки авторизации
+      type: object
+      properties:
+        email:
+          type: string
+          description: 'Почта'
+        encryptedText:
+          type: string
+          description: 'Зашифрованный текст'
+
+    CommonData:
+      title: Пользователь
+      description: дтошка пользователя
+      type: object
+      properties:
+        lastName:
+          type: string
+          description: 'Фамилия'
+        firstName:
+          type: string
+          description: 'Имя'
+        nickName:
+          type: string
+          description: 'Никнейм'
+        birthday:
+          type: string
+          format: date
+          example: '01-01-2000'
+          x-setter-extra-annotation: '@com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")'
+          description: 'День рождения'
+        email:
+          type: string
+          description: 'Почта'
+
+    PersonDto:
+      title: Пользователь
+      description: дтошка пользователя
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CommonData'
+        - properties:
+            id:
+              type: string
+              description: 'Уникальный идентификатор'
+            publicKey:
+              type: string
+              description: 'Открытый ключ'
+
+    VerificationResultDto:
+      title: Пользователь
+      description: дтошка пользователя
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CommonData'
+
+    ErrorDto:
+      title: ErrorDto
+      description: Описание ошибок
+      required:
+        - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusDto'
+        errors:
+          type: array
+          maxItems: 100
+          description: Перечень ошибок
+          items:
+            $ref: '#/components/schemas/ErrorFieldDto'
+      additionalProperties: false
+
+    StatusDto:
+      title: StatusDtoRs
+      description: Статус операции
+      required:
+        - code
+      type: object
+      properties:
+        code:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: Код статуса
+        message:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: Сообщение
+          example: Ошибка валидации запроса на оплату
+      additionalProperties: false
+
+    ErrorFieldDto:
+      title: ErrorFieldDtoRs
+      description: Описание ошибки
+      required:
+        - name
+        - code
+        - message
+      type: object
+      properties:
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: Ключ/название ошибочного поля
+        code:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: Код ошибки
+        message:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: Текст ошибки
+          example: Некорректные данные
+      additionalProperties: false
+
+    Pageable:
+      type: object
+      additionalProperties: false
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        sort:
+          type: array
+          maxItems: 2147483647
+          items:
+            type: string
+            minLength: 1
+            maxLength: 255

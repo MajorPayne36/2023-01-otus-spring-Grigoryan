@@ -1,0 +1,15 @@
+pluginManagement {
+    plugins {
+        id 'org.springframework.boot' version '3.1.1'
+        id 'io.spring.dependency-management' version '1.1.1'
+    }
+
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+}
+
+rootProject.name = 'eba'
+include ('eba-api', 'eba-domain', 'eba-service')

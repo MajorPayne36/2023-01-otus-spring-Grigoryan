@@ -1,0 +1,37 @@
+server:
+  port: 7887
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://avgrigoryan:avgrigoryan@cluster0.gztm139.mongodb.net/?retryWrites=true&w=majority
+      database: eba
+  application.name: eba-service
+
+springdoc:
+  show-actuator: true
+
+management:
+  info:
+    git:
+      enabled: true
+      mode: full
+  endpoints:
+    web:
+      discovery:
+        enabled: true
+      exposure:
+        include: "*"
+        exclude: "beans"
+    enabled-by-default: false
+  endpoint:
+    env:
+      enabled: true
+    info:
+      enabled: true
+    health:
+      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true

@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'io.spring.dependency-management'
+    id 'org.springframework.boot' apply false
+    id 'org.openapi.generator'
+}
+
+dependencies {
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${versions.spring_boot}"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${versions.spring_boot}"
+    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: "${versions.findbugs}"
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: "${versions.spring_doc}"
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-data-rest', version: "${versions.spring_doc}"
+    implementation group: 'org.openapitools', name: 'openapi-generator-gradle-plugin', version: "${versions.openapi_generator}"
+    implementation group: 'org.openapitools', name: 'jackson-databind-nullable', version: "${versions.jackson_databind_nullable}"
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version:"${versions.spring_cloud}"
+    implementation group: 'javax.annotation', name: 'javax.annotation-api', version: "${versions.javax_annotation}"
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: "${versions.lombok}"
+
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${versions.lombok}"
+}
+
+compileJava.dependsOn tasks.openApiGenerate
+
+openApiGenerate {
+    generatorName = "spring"
+    library = 'spring-cloud'
+    inputSpec = "$projectDir/src/main/resources/api.yaml".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "ru.otus.eba.controller.openapi"
+    modelPackage = "ru.otus.eba.dto.openapi"
+    skipOperationExample = true
+    importMappings = [
+            Pageable: "org.springframework.data.domain.Pageable",
+    ]
+    configOptions = [
+            skipDefaultInterface: "true",
+            useTags             : "true"
+    ]
+    additionalProperties = [
+            removeEnumValuePrefix: "false"
+    ]
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir}/generated/src/main/java"
+        }
+    }
+}
