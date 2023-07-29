@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: 'Единая безопасная авторизация'
+  title: 'Единая безопасная аутентификация'
   version: 1.0.0
   description: 'Запросы ЕБА'
   contact:
@@ -112,7 +112,7 @@ components:
   schemas:
     VerificationDto:
       title: 'Верификация'
-      description: 'дтошка проверки авторизации'
+      description: 'дтошка проверки аутентификации'
       type: object
       properties:
         email:

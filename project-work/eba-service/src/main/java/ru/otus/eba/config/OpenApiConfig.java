@@ -20,7 +20,7 @@ public class OpenApiConfig {
         String version = getClass().getPackage().getImplementationVersion();
         return new OpenAPI()
                 .info(new Info()
-                        .title("Единая безопасная авторизация")
+                        .title("Единая безопасная аутентификация")
                         .version(version)
                         .contact(new Contact().name("Григорян Андраник").email("agrigya@ya.ru").url("https://t.me/grigland1")));
     }
