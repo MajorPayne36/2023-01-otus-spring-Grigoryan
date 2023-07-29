@@ -1,0 +1,293 @@
+openapi: 3.0.3
+info:
+  title: 'Единая безопасная аутентификация'
+  version: 1.0.0
+  description: 'Запросы ЕБА'
+  contact:
+    name: 'Григорян Андраник Вачаганович'
+    url: 'https://t.me/grigland1'
+    email: agrigya@ya.ru
+servers:
+  - url: 'https://127.0.0.1:7887'
+    description: localhost
+tags:
+  - name: Person
+    description: 'The Persons API'
+  - name: Verification
+    description: 'The Verification API'
+  - name: Crypto
+    description: 'The Cryptography API'
+
+paths:
+  /api/v1/eba/users:
+    get:
+      tags:
+        - Person
+      summary: 'Получение пользователей'
+      description: 'Возвращает всех пользователей'
+      operationId: getAll
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersonDto'
+    post:
+      tags:
+        - Person
+      summary: 'Сохранение/Обновление пользователя'
+      description: 'Сохраняет или обновляет переданного пользователя'
+      operationId: savePerson
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDto'
+
+  /api/v1/eba/verify:
+    post:
+      tags:
+        - Verification
+      summary: 'Аутентифицирует пользователя'
+      description: 'Аутентификация пользователя'
+      operationId: verify
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResultDto'
+
+  /api/v1/eba/crypto/keys:
+    get:
+      tags:
+        - Crypto
+      summary: 'Генерация ключей криптографии'
+      description: 'Генерация Открытого и Закрытого ключей'
+      operationId: generateKeys
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CryptoKeysDto'
+  /api/v1/eba/crypto/tools/cipher:
+    post:
+      tags:
+        - Crypto
+      summary: 'Тулза шифрования'
+      description: 'Шифрование и дешифрование разными ключами'
+      operationId: processOperation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CipherToolDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+
+components:
+  schemas:
+    VerificationDto:
+      title: 'Верификация'
+      description: 'дтошка проверки аутентификации'
+      type: object
+      properties:
+        email:
+          type: string
+          description: 'Почта'
+        encryptedText:
+          type: string
+          description: 'Зашифрованный текст'
+
+    CommonData:
+      title: 'Пользователь'
+      description: 'дтошка пользователя'
+      type: object
+      properties:
+        lastName:
+          type: string
+          description: 'Фамилия'
+        firstName:
+          type: string
+          description: 'Имя'
+        nickName:
+          type: string
+          description: 'Никнейм'
+        birthday:
+          type: string
+          format: date
+          example: '01-01-2000'
+          x-setter-extra-annotation: '@com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")'
+          description: 'День рождения'
+        email:
+          type: string
+          description: 'Почта'
+
+    CipherToolDto:
+      title: 'Объект для инструмента шифрования'
+      description: 'Объект содержаший информацию о шифровании и дешифровании текста.'
+      type: object
+      required:
+        - keyString
+        - text
+        - operationType
+      properties:
+        keyString:
+          type: string
+          description: 'Открытый/Закрытый ключ в виде строки'
+        text:
+          type: string
+          description: 'Текст для шифрования/дешифрования'
+        operationType:
+          type: string
+          description: 'Тип операции'
+          enum:
+            - decryptByPrivateKey
+            - decryptByPublicKey
+            - encryptByPrivateKey
+            - encryptByPublicKey
+
+    PersonDto:
+      title: 'Пользователь'
+      description: 'дтошка пользователя'
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CommonData'
+        - properties:
+            id:
+              type: string
+              description: 'Уникальный идентификатор'
+            publicKey:
+              type: string
+              description: 'Открытый ключ'
+
+    CryptoKeysDto:
+      title: 'Криптографические ключи'
+      description: 'Дтошка открытого и закрытого ключей'
+      required:
+        - publicKey
+        - privateKey
+      type: object
+      properties:
+        publicKey:
+          type: string
+          description: 'Открытый ключ'
+        privateKey:
+          type: string
+          description: 'Закрытый ключ'
+
+    VerificationResultDto:
+      title: 'Результат верификации'
+      description: 'Дтошка содержащая общую информацию о пользователе'
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CommonData'
+
+    ErrorDto:
+      title: ErrorDto
+      description: 'Описание ошибок'
+      required:
+        - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusDto'
+        errors:
+          type: array
+          maxItems: 100
+          description: 'Перечень ошибок'
+          items:
+            $ref: '#/components/schemas/ErrorFieldDto'
+      additionalProperties: false
+
+    StatusDto:
+      title: StatusDtoRs
+      description: 'Статус операции'
+      required:
+        - code
+      type: object
+      properties:
+        code:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: Код статуса
+        message:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: 'Сообщение'
+          example: 'Ошибка валидации запроса на оплату'
+      additionalProperties: false
+
+    ErrorFieldDto:
+      title: ErrorFieldDtoRs
+      description: 'Описание ошибки'
+      required:
+        - name
+        - code
+        - message
+      type: object
+      properties:
+        name:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: 'Ключ/название ошибочного поля'
+        code:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: 'Код ошибки'
+        message:
+          maxLength: 255
+          minLength: 0
+          type: string
+          description: 'Текст ошибки'
+          example: 'Некорректные данные'
+      additionalProperties: false
+
+    Pageable:
+      type: object
+      additionalProperties: false
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        sort:
+          type: array
+          maxItems: 2147483647
+          items:
+            type: string
+            minLength: 1
+            maxLength: 255

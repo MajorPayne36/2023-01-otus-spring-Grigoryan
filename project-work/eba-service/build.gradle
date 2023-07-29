@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+    id 'com.gorylenko.gradle-git-properties'
+}
+
+version = "${version}"
+
+dependencies {
+    implementation project(':eba-api')
+    implementation project(':eba-domain')
+
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${versions.spring_boot}"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: "${versions.spring_boot}"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: "${versions.spring_boot}"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: "${versions.spring_boot}"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: "${versions.spring_boot}"
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: "${versions.springdoc_openapi_starter}"
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: "${versions.spring_doc}"
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-data-rest', version: "${versions.spring_doc}"
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: "${versions.spring_cloud}"
+
+    implementation fileTree('lib') { include '*.jar' }
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: "${versions.lombok}"
+
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${versions.lombok}"
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: "${versions.spring_boot}"
+    testImplementation group: 'org.jeasy', name: 'easy-random-core', version: "${versions.easy_random_core}"
+
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${versions.lombok}"
+}
+
+bootJar {
+    archiveFileName = "eba-service-${version}.jar"
+}
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+gitProperties {
+    keys = ['git.commit.id', 'git.build.version']
+}
