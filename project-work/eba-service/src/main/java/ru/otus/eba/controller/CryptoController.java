@@ -2,13 +2,13 @@ package ru.otus.eba.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import ru.otus.eba.controller.openapi.CryptoApi;
 import ru.otus.eba.dto.openapi.CipherToolDto;
 import ru.otus.eba.dto.openapi.CryptoKeysDto;
 import ru.otus.eba.service.CryptoService;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public  class CryptoController implements CryptoApi {
 

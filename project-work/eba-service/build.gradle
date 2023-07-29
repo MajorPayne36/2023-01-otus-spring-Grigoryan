@@ -29,10 +29,20 @@ dependencies {
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${versions.lombok}"
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: "${versions.spring_boot}"
+    testImplementation group: 'org.jeasy', name: 'easy-random-core', version: "${versions.easy_random_core}"
+
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${versions.lombok}"
 }
 
 bootJar {
     archiveFileName = "eba-service-${version}.jar"
+}
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+test {
+    useJUnitPlatform()
 }
 
 gitProperties {
