@@ -23,7 +23,7 @@ public class LoggingAspect {
      *
      * @param joinPoint информация о вызове.
      */
-    @Before("execution(* ru.otus.eba.service.*Service.*(..))")
+    @Before("execution(* ru.otus.eba.service.*Service*.*(..))")
     public void logBefore(JoinPoint joinPoint) {
         StringBuilder sbStart = new StringBuilder();
         sbStart.append("start method: ").append(joinPoint.getSignature()).append(" {");
@@ -42,7 +42,7 @@ public class LoggingAspect {
      * @param joinPoint информация о вызове.
      */
     @AfterReturning(
-            pointcut = "execution(* ru.otus.eba.service.*Service.*(..))",
+            pointcut = "execution(* ru.otus.eba.service.*Service*.*(..))",
             returning = "result"
     )
     public void logAfterReturning(JoinPoint joinPoint, Object result) {
