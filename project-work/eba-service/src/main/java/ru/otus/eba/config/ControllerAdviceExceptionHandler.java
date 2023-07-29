@@ -16,6 +16,7 @@ import ru.otus.eba.exception.RestException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -64,10 +65,10 @@ public class ControllerAdviceExceptionHandler {
      */
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ErrorDto> handleOtherExceptions(Exception e, HttpServletRequest request) {
-        log.error(e.getCause().toString(), e);
+        log.error(toExceptionMessage(e), e);
 
         var status = new StatusDto();
-        status.setMessage(e.getCause().toString());
+        status.setMessage(toExceptionMessage(e));
         status.setCode(ExceptionCode.UNKNOWN.name());
         var dto = new ErrorDto();
         dto.setStatus(status);
@@ -88,5 +89,12 @@ public class ControllerAdviceExceptionHandler {
             }).collect(Collectors.toList());
         }
         return null;
+    }
+
+    private String toExceptionMessage(Exception e) {
+        return Optional.of(e)
+                .map(Exception::getCause)
+                .map(Throwable::toString)
+                .orElse(e.getMessage());
     }
 }

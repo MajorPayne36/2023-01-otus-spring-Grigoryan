@@ -1,6 +1,7 @@
 package ru.otus.eba.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +19,10 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         String version = getClass().getPackage().getImplementationVersion();
         return new OpenAPI()
-                .info(new Info().title("EBA-API").version(version));
+                .info(new Info()
+                        .title("Единая безопасная авторизация")
+                        .version(version)
+                        .contact(new Contact().name("Григорян Андраник").email("agrigya@ya.ru").url("https://t.me/grigland1")));
     }
 
     @Bean
