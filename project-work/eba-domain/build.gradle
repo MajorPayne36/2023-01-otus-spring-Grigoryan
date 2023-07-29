@@ -18,8 +18,6 @@ dependencies {
     annotationProcessor group: 'org.hibernate', name: 'hibernate-jpamodelgen', version: "${versions.hibernate_jpamodelgen}"
     annotationProcessor group: 'org.mapstruct', name: 'mapstruct-processor', version: "${versions.mapstruct}"
 
-    testImplementation('org.junit.jupiter:junit-jupiter')
-    testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: "${versions.hamcrest}"
 }
 
 test {

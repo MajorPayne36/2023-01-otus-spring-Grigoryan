@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 @Configuration
 public class OpenApiConfig {

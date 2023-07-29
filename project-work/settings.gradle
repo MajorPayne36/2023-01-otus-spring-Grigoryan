@@ -12,4 +12,7 @@ pluginManagement {
 }
 
 rootProject.name = 'eba'
-include ('eba-api', 'eba-domain', 'eba-service')
+include 'eba-api'
+include 'eba-domain'
+include 'eba-service'
+include 'eba-config'

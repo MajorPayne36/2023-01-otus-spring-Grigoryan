@@ -1,8 +1,8 @@
-FROM openjdk:17-jdk-alpine as builder
+FROM gradle:8.2.1-jdk17-alpine as builder
 
 COPY . .
-RUN gradle build -x test
+RUN gradle clean build -x test
 
-FROM  openjdk:17-jdk-alpine
-COPY --from=builder /home/gradle/eba-service/build/libs/eba-service.jar /app/
-CMD ["java","-Dspring.config.location=/app/config/application.yaml,classpath:/", "-Dspring.profiles.active=default,audit,security", "-jar", "/app/eba-service.jar"]
+FROM  gradle:8.2.1-jdk17-alpine
+COPY --from=builder /home/gradle/eba-service/build/libs/eba-service-1.0.0.jar /app/
+CMD ["java", "-jar", "/app/eba-service-1.0.0.jar"]

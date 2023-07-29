@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-config-server', version: "${versions.spring_cloud}"
+}
+
+test {
+    useJUnitPlatform()
+}
